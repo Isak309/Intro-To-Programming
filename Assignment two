@@ -67,7 +67,7 @@ class RetirementAccount
     RetirementAccount(double, double , double, double);
     RetirementAccount();
 	
-	//toString function that returns a string that represents the values of RetirementAccount class
+	//tostring function that returns a string that represents the values of RetirementAccount class
     string tostring();
     
     //calculateRetirementSavings() function
