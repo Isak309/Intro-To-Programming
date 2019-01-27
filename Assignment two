@@ -175,7 +175,7 @@ double RetirementAccount::get_t()
 
 string RetirementAccount::tostring()
 {	
-  string result = "    D (deposit amount)   = $" + to_string(D) + " "; //this does not work
+  string result = "    D (deposit amount)   = $" + to_string(D) + " "; //this does not work "'to_string' was not declared in this scope"
   result += "    m (periods per year) =  " + /* I don't know what to put here to get result*/ + " ";
   result += "    r (interest rate)    =  " + /* I don't know what to put here to get result*/ + " ";
   result += "    t (time in years)    =  " + /* I don't know what to put here to get result*/ + " ";
