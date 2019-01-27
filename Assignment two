@@ -1,5 +1,4 @@
 /** 
-
  * 
  * @description Assignment 02, practice using C++ classes.  In this assignment
  *   we encapsulate a retirement planning object, that can set the amount of periodic
@@ -39,14 +38,14 @@ using namespace std;
 *  Second one is default constructor that is initialized right away
 *  setting all private parameters equal to 1.0
 * 
-*  toString() function is just a function that returns a string that 
+*  tostring() function is just a function that returns a string that 
 *  represents values of the retirement account class
 *
 *  calculateRetirementSavings() function will implement the first formula we must use 
 *  in order to calculate the total amount of savings the account will generate.
 *  it will return that amount.
 *
-*  planRetirementDesposits() function will take a user desired input as a parameter
+*  planRetirementDeposits() function will take a user desired input as a parameter
 *  and it will implement the second equation given to return how much money must 
 *  be deposited each period to meet the goal
 *
@@ -69,13 +68,13 @@ class RetirementAccount
     RetirementAccount();
 	
 	//toString function that returns a string that represents the values of RetirementAccount class
-    string toString();
+    string tostring();
     
     //calculateRetirementSavings() function
     double calculateRetirementSavings();
     
     //planRetirementDesposits() function
-    double planRetirementDesposits(double);
+    double planRetirementDeposits(double);
     //Setters
     void set_D(double inputDepositAmount);
     void set_m(double inputDepositsPerYear);
@@ -170,14 +169,13 @@ double RetirementAccount::get_t()
   return t;
 };
 /**
-*  toString function. Function that you can call that will
+*  tostring function. Function that you can call that will
 *  output information about your account
 */
 
-string RetirementAccount::toString()
-{
-	
-  string result = "    D (deposit amount)   = $" + /* I don't know what to put here to get result*/ + " ";
+string RetirementAccount::tostring()
+{	
+  string result = "    D (deposit amount)   = $" + to_string(D) + " "; //this does not work
   result += "    m (periods per year) =  " + /* I don't know what to put here to get result*/ + " ";
   result += "    r (interest rate)    =  " + /* I don't know what to put here to get result*/ + " ";
   result += "    t (time in years)    =  " + /* I don't know what to put here to get result*/ + " ";
@@ -196,7 +194,12 @@ double RetirementAccount::calculateRetirementSavings()
   return savings;
 }
 
-double RetirementAccount::planRetirementDesposits(double savings)
+/*
+*  planRetirementDeposits() function will implement the second formula
+*  @param double savings - parameter used from user input to calculate how much
+*  you need to save each month in order to get said parameter
+*/
+double RetirementAccount::planRetirementDeposits(double savings)
 {
   double deposit;
   deposit = savings * ((r/m) / (pow(1 + (r/m), m*t)-1));
