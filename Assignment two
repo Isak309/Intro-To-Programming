@@ -1,4 +1,5 @@
 /** 
+
  * 
  * @description Assignment 02, practice using C++ classes.  In this assignment
  *   we encapsulate a retirement planning object, that can set the amount of periodic
@@ -183,8 +184,23 @@ string RetirementAccount::toString()
   return result;
 }
 
+/*
+*  calculateRetirementSavings() function will implement the first formula we must use 
+*  in order to calculate the total amount of savings the account will generate.
+*  it will return that amount.
+*/
+double RetirementAccount::calculateRetirementSavings()
+{
+  double savings;
+  savings = D * ((pow(1 + r/m, m*t))-1) / (r/m);
+  return savings;
+}
 
-
+double RetirementAccount::planRetirementDesposits(double savings)
+{
+  double deposit;
+  deposit = savings * ((r/m) / (pow(1 + (r/m), m*t)-1));
+}
 /** main 
  * The main entry point for this program.  Execution of this program
  * will begin with this main function.
