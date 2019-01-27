@@ -1,10 +1,4 @@
 /** 
- * @author Isak Angerstig
- * @cwid   502 09 016
- * @class  COSC 2336, Spring 2019
- * @ide    Dev C++
- * @date   January 26, 2019
- * @assg   Assignment 01
  * 
  * @description Assignment 02, practice using C++ classes.  In this assignment
  *   we encapsulate a retirement planning object, that can set the amount of periodic
