@@ -1,4 +1,10 @@
 /** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Dev C++
+ * @date   January 26, 2019
+ * @assg   Assignment 02
  * 
  * @description Assignment 02, practice using C++ classes.  In this assignment
  *   we encapsulate a retirement planning object, that can set the amount of periodic
@@ -175,10 +181,10 @@ double RetirementAccount::get_t()
 
 string RetirementAccount::tostring()
 {	
-  string result = "    D (deposit amount)   = $" + to_string(D) + " "; //this does not work "'to_string' was not declared in this scope"
-  result += "    m (periods per year) =  " + /* I don't know what to put here to get result*/ + " ";
-  result += "    r (interest rate)    =  " + /* I don't know what to put here to get result*/ + " ";
-  result += "    t (time in years)    =  " + /* I don't know what to put here to get result*/ + " ";
+  string result = "    D (deposit amount)   = $" + to_string(D) + " \n"; 
+  result += "    m (periods per year) =  " + to_string(m) + " \n";
+  result += "    r (interest rate)    =  " + to_string(r) + " \n";
+  result += "    t (time in years)    =  " + to_string(t) + " \n";
   return result;
 }
 
@@ -203,6 +209,7 @@ double RetirementAccount::planRetirementDeposits(double savings)
 {
   double deposit;
   deposit = savings * ((r/m) / (pow(1 + (r/m), m*t)-1));
+  return deposit;
 }
 /** main 
  * The main entry point for this program.  Execution of this program
@@ -235,8 +242,8 @@ int main(int argc, char** argv)
   
   // test tostring()
   cout << "=== Testing tostring() method..................." << endl;
-  //cout << "Account: " << endl << account.tostring() << endl;
-  //cout << endl;
+  cout << "Account: " << endl << account.tostring() << endl;
+  cout << endl;
   
   // test setter methods
   cout << "=== Testing setter methods..................." << endl;
@@ -244,82 +251,76 @@ int main(int argc, char** argv)
   account.set_m(12.0);
   account.set_r(0.048);
   account.set_t(25.00);
-  //cout << "Account: " << endl << account.tostring() << endl;
+  cout << "Account: " << endl << account.tostring() << endl;
 
   // test retirement savings calculation
   cout << "=== Testing retirement savings calculations..................." << endl;
-  //cout << "My retirement savings: $"
-  //     << fixed << setprecision(2)
-  //     << account.calculateRetirementSavings() << endl;
-  //cout << endl;
+  cout << "My retirement savings: $" << fixed 
+  << setprecision(2) << account.calculateRetirementSavings() << endl;
+  cout << endl;
   
   // test retirement planning calculations
   cout << "=== Testing retirement planning calculations..................." << endl;
-  //double newD = account.planRetirementDeposits(1000000.00);
-  //cout << "In order to save 1 million dollars, we need to make monthly deposits of $"
-  //     << fixed << setprecision(2)
-  //     << newD;
-  //cout << endl;
+  double newD = account.planRetirementDeposits(1000000.00);
+  cout << "In order to save 1 million dollars, we need to make monthly deposits of $"
+  << fixed << setprecision(2) << newD;
+  cout << endl;
 
-  //account.set_D(newD);
-  //cout << "If we set our deposit to this new amount..." << endl;
-  //cout << "Account: " << endl << account.tostring() << endl;
-  //cout << "My retirement savings: $"
-  //     << fixed << setprecision(2)
-  //     << account.calculateRetirementSavings() << endl;
-  //cout << endl;
+  account.set_D(newD);
+  cout << "If we set our deposit to this new amount..." << endl;
+  cout << "Account: " << endl << account.tostring() << endl;
+  cout << "My retirement savings: $"
+  << fixed << setprecision(2) << account.calculateRetirementSavings() << endl;
+  cout << endl;
 
   // an additional test of savings and planning calculations
   cout << "=== Second test on account2 of savings and planning..................." << endl;
-  //RetirementAccount account2(650.00, 9.0, 0.035, 30.0);
-  //cout << "Account 2:" << endl << account2.tostring() << endl;
-  //cout << "My retirement savings: $"
-  //     << fixed << setprecision(2)
-  //     << account2.calculateRetirementSavings() << endl;
-  //cout << endl;
+  RetirementAccount account2(650.00, 9.0, 0.035, 30.0);
+  cout << "Account 2:" << endl << account2.tostring() << endl;
+  cout << "My retirement savings: $" << fixed << setprecision(2)
+  << account2.calculateRetirementSavings() << endl;
+  cout << endl;
 
-  //newD = account2.planRetirementDeposits(2000000.00);
-  //cout << "In order to save 2 million dollars, we need to make deposits of $"
-  //     << fixed << setprecision(2)
-  //     << newD;
-  //cout << endl;
+  newD = account2.planRetirementDeposits(2000000.00);
+  cout << "In order to save 2 million dollars, we need to make deposits of $"
+  << fixed << setprecision(2) << newD;
+  cout << endl;
 
-  //account2.set_D(newD);
-  //cout << "If we set our deposit to this new amount..." << endl;
-  //cout << "Account: " << endl << account2.tostring() << endl;
-  //cout << "My retirement savings: $"
-  //     << fixed << setprecision(2)
-  //     << account2.calculateRetirementSavings() << endl;
-  //cout << endl;
+  account2.set_D(newD);
+  cout << "If we set our deposit to this new amount..." << endl;
+  cout << "Account: " << endl << account2.tostring() << endl;
+  cout << "My retirement savings: $" << fixed << setprecision(2)
+  << account2.calculateRetirementSavings() << endl;
+  cout << endl;
 
 
   // more tests, demonstrate using arrays of classes and looping over classes
   // create 10 RetirementAccount's to perform some comparison calculations
   cout << "=== Larger number of tests, compare effect of increasing monthly deposit amount..................."
        << endl;
-  //const int NUM_PLANS = 10;
-  //RetirementAccount plan[NUM_PLANS];
+  const int NUM_PLANS = 10;
+  RetirementAccount plan[NUM_PLANS];
 
-  // set all accounts with same interest rate, periods and time, but different
-  // deposit amounts
-  //double D = 500.00; // base amount to deposit.
-  //double m = 12.0;   // make monthly deposits
-  //double r = 0.04;   // compound interest rate.
-  //double t = 30.0;   // save for retirement for 30 years
-  //for (int i = 0; i < NUM_PLANS; i++)
-  //{
-  //  plan[i].set_D(D + (i * 100.0));
-  //  plan[i].set_m(m);
-  //  plan[i].set_r(r);
-  //  plan[i].set_t(t);
+   //set all accounts with same interest rate, periods and time, but different
+   //deposit amounts
+  double D = 500.00; // base amount to deposit.
+  double m = 12.0;   // make monthly deposits
+  double r = 0.04;   // compound interest rate.
+  double t = 30.0;   // save for retirement for 30 years
+  for (int i = 0; i < NUM_PLANS; i++)
+  {
+    plan[i].set_D(D + (i * 100.0));
+    plan[i].set_m(m);
+    plan[i].set_r(r);
+    plan[i].set_t(t);
 
-  //  cout << "Plan " << i << ":" << endl;
-  //  cout << plan[i].tostring();
-  //  cout << "    Total Savings: "
-  //       << fixed << setprecision(2)
-  //       << plan[i].calculateRetirementSavings() << endl;
-  //}
+    cout << "Plan " << i << ":" << endl;
+    cout << plan[i].tostring();
+    cout << "    Total Savings: "
+    << fixed << setprecision(2)
+	<< plan[i].calculateRetirementSavings() << endl;
+  }
   
-  // return 0 to indicate successful completion
+   //return 0 to indicate successful completion
   return 0;
 }
