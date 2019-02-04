@@ -1,4 +1,3 @@
-
 /* @description LargeInteger class. Represent an arbitrarily large
 * (signed) integer. This class keeps the digits of the integer in
 * an array of integers internally. The array of integers is
@@ -49,6 +48,40 @@ LargeInteger::LargeInteger(int value)
    }
 }
 
+/** LargeInteger constructor
+* Constructor for LargeInteger class that takes a two
+* integers to be used to construct a large integer from an array
+* of digits and an integer array as a second parameter
+*
+* @param sizeOfArrayOfDigits A regular (32-bit) integer that we will be the
+* size of the array
+*
+* @param integerArray is the array that sizeOfArrayOfDigits is a size of
+*
+*/
+LargeInteger::LargeInteger(int sizeOfArrayOfDigits, int* integerArray)
+{
+	// set this instance id
+	id = nextLargeIntegerId++;
+
+  // allocate an array of the right size
+	digits = new int[sizeOfArrayOfDigits];
+	
+	//the size of digits is sizeOfArrayOfDigits
+	numDigits = sizeOfArrayOfDigits;
+  // iterate through the digits in value, putting them into our
+  // array of digits.
+	int digit;
+	for (int digitIndex = 0; digitIndex < numDigits; digitIndex++)
+   {
+       // digit equals current element of integer array
+       digit = integerArray[digitIndex];
+       
+       //digits array equals value of digit
+       digits[digitIndex] = digit;
+   }
+}
+
 /** LargeInteger destructor
 * Destructor for the LargeInteger class. Make sure we are good
 * managers of memory by freeing up our digits when this object
@@ -66,13 +99,113 @@ LargeInteger::~LargeInteger()
    delete[] this->digits;
 }
 
+/**
+*  tostring function. Function that you can call that will
+*  be a representation of the LargeInteger
+* in order to assert different tostring calls I cannot change
+* the class variables. So I create a copy and use them in 
+* my function
+*/
 string LargeInteger::tostring()
 {
 	ostringstream output;
 
-	for(numDigits; numDigits --> 0;)
+  int numberOfDigits;
+  int* ptrArray;
+  
+  numberOfDigits = numDigits;
+  ptrArray = digits;
+
+	for(numberOfDigits; numberOfDigits --> 0;)
 	{
-    output << digits[numDigits];
+    output << ptrArray[numberOfDigits];
+
 	}
 	return output.str();
 }
+
+/**
+* function named maxDigits()
+* This function will take a reference 
+* to a LargeInteger as its only parameter
+*
+* @param LargeInteger secondNumber - variable that
+* looks at another declared class member
+* and checks which one is bigger
+*/
+int LargeInteger::maxDigits(LargeInteger secondNumber)
+{
+	if (numDigits<secondNumber.numDigits)
+	{
+		return secondNumber.numDigits;
+	}
+	else
+	{
+		return numDigits;
+	}
+}
+
+/**
+* function named digitAtPlace()
+* This function returns the digit of this 
+* large integer object at a particular digit index
+*
+* @param userEnteredElement - takes an integer index as its
+* input parameter, and returns an integer as its result
+*
+*/
+int LargeInteger::digitAtPlace(int value)
+{
+
+if(numDigits>=value && numDigits>=0)
+	{
+	  return digits[value];
+	}
+	else
+	{
+		/*I don't know what to do here. I tried a couple different things
+		but nothing worked. I always get random value when index is under 0 */
+    return 0; 
+	}
+}
+
+void LargeInteger::appendDigit(int value)
+{
+	int* myNewArray;
+	int size;
+	size = numDigits +1;
+	myNewArray = new int[size];
+	for(int index = 0; index<size; index++)
+	{
+		myNewArray[index] = digits[index];
+		digits[index] = myNewArray[index];
+	}
+	myNewArray[size] = value; //Test in order to see if my new array is correct
+	for(int i = 0; i<size;i++)
+	{
+	cout<<myNewArray[i];
+	}
+	cout<<endl;
+	
+	delete [] digits;
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
