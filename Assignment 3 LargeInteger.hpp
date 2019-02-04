@@ -1,4 +1,3 @@
-
 /* @description LargeInteger class. Represent an arbitrarily large
 * (signed) integer. This class keeps the digits of the integer in
 * an array of integers internally. The array of integers is
@@ -12,6 +11,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <cctype>
 
 using namespace std;
 
@@ -35,14 +35,19 @@ using namespace std;
 class LargeInteger
 {
 private:
-   int id;
-   int numDigits; // number of digits in LargeInt / size of alloc array
-   int* digits; // the digits of the LargeInt we are representing
+  int id;
+  int numDigits; // number of digits in LargeInt / size of alloc array
+  int* digits; // the digits of the LargeInt we are representing
 
 public:
-   LargeInteger(int value);
-   ~LargeInteger();
-   string tostring();
+  LargeInteger(int value);
+  LargeInteger(int sizeOfArrayOfDigits, int* integerArray);
+  ~LargeInteger();
+  string tostring();
+  
+  int maxDigits(LargeInteger);
+  int digitAtPlace(int value);
+  void appendDigit(int value);
 };
 
 
