@@ -1,0 +1,237 @@
+/** 
+ * 
+ * @description Assignment 07 part 01, practice with operator overloading.
+ *   In this first part of assignment, you need to define a ListType class
+ *   and overload the indicated operators.  This version of your class
+ *   will only support list of int values.  You will turn this into a
+ *   class template in part 2 of the assignment.
+ */
+#include <iostream>
+#include <string>
+#include <cassert>
+#include "ListType.hpp"
+#include <sstream>
+#include <cstring>
+using namespace std;
+
+
+/** main 
+ * The main entry point for this program.  Execution of this program
+ * will begin with this main function.
+ *
+ * @param argc The command line argument count which is the number of
+ *     command line arguments provided by user when they started
+ *     the program.
+ * @param argv The command line arguments, an array of character
+ *     arrays.
+ *
+ * @returns An int value indicating program exit status.  Usually 0
+ *     is returned to indicate normal exit and a non-zero value
+ *     is returned to indicate an error condition.
+ */
+int main(int argc, char** argv)
+{
+  //------------------------------------------------------------------------
+  // test constructors and getters
+  cout << "--------- Test constructors and getters -------------------------" << endl;
+  
+  ListType l1;
+  cout << "l1 size: " << l1.getSize()
+      << " allocSize: " << l1.getAllocSize() << endl;
+  assert(l1.getSize() == 0);
+  assert(l1.getAllocSize() == 0);
+
+  ListType l2(7); // empty list but with room for 7 items
+  cout << "l2 size: " << l2.getSize()
+       << " allocSize: " << l2.getAllocSize() << endl;
+  assert(l2.getSize() == 0);
+  assert(l2.getAllocSize() == 7);
+
+  int size = 5;
+  int items[] = {3, 9, 2, 7, 5};
+  ListType l3(size, items);
+  cout << "l3 size: " << l3.getSize()
+       << " allocSize: " << l3.getAllocSize() << endl;
+  assert(l3.getSize() == 5);
+  assert(l3.getAllocSize() == 5);
+
+  cout << endl << endl;
+
+  
+  //------------------------------------------------------------------------
+  // test output stream operator implementation
+  cout << "--------- Test output stream operator ---------------------------" << endl;
+
+  cout << "l2 items: " << l2.tostring() << endl;
+  //assert(l2.tostring() == "[]");
+  //cout << l2 << endl << endl;
+
+  cout << "l3 items: " << l3.tostring() << endl;
+  //assert(l3.tostring() == "[3, 9, 2, 7, 5]");
+  //cout << l3 << endl << endl;
+
+  cout << endl << endl;
+
+  
+  //------------------------------------------------------------------------
+  // test appending and operator& overloading
+  cout << "--------- Test append and operator& -----------------------------" << endl;
+
+  // append to empty list
+  //l1.appendItem(1);
+  //cout << "append to empty l1: " << endl << l1 << endl;
+  //assert(l1.tostring() == "[1]" );
+  //assert(l1.getSize() == 1);
+  //assert(l1.getAllocSize() == 10);
+
+  // append to non empty list
+  //l3.appendItem(12);
+  //cout << "append to nonempty l3: " << endl << l3 << endl;
+  //assert(l3.tostring() == "[3, 9, 2, 7, 5, 12]" );
+  //assert(l3.getSize() == 6);
+  //assert(l3.getAllocSize() == 15);
+  
+  // append 2 items using operator& and test
+  //l3 & 6;
+  //l3 & 11;
+  //cout << "operator& test l3: " << endl << l3 << endl;
+  //assert(l3.tostring() == "[3, 9, 2, 7, 5, 12, 6, 11]" );
+  //assert(l3.getSize() == 8);
+  //assert(l3.getAllocSize() == 15);
+  
+  // some more, mix up append function and operator
+  //l1.appendItem(4);
+  //l1 & 3;
+  //l1 & 7;
+  //l1.appendItem(0);
+  //cout << "mixing append and operator& l1: " << endl << l1 << endl;
+  //assert(l1.tostring() == "[1, 4, 3, 7, 0]");
+  //assert(l1.getSize() == 5);
+  //assert(l1.getAllocSize() == 10);
+  
+  cout << endl << endl;
+
+  
+  //------------------------------------------------------------------------
+  // test prepending operator| overloading
+  cout << "--------- Test prepend and operator| ----------------------------" << endl;
+
+  // prepend to empty list
+  //l2.prependItem(8);
+  //cout << "prepend to empty l2: " << endl << l2 << endl;
+  //assert(l2.tostring() == "[8]" );
+  //assert(l2.getSize() == 1);
+  //assert(l2.getAllocSize() == 7);
+  
+  // prepend to nonempty list
+  //l3.prependItem(8);
+  //cout << "prepend to nonempty l3: " << endl << l3 << endl;
+  //assert(l3.tostring() == "[8, 3, 9, 2, 7, 5, 12, 6, 11]" );
+  //assert(l3.getSize() == 9);
+  //assert(l3.getAllocSize() == 15);
+
+  // operator| test
+  //l3 | 13;
+  //l3 | 4;
+  //cout << "operator| test l3: " << endl << l3 << endl;
+  //assert(l3.tostring() == "[4, 13, 8, 3, 9, 2, 7, 5, 12, 6, 11]");
+  //assert(l3.getSize() == 11);
+  //assert(l3.getAllocSize() == 15);
+
+  // some more, mix up prepend function and operator
+  //l2.prependItem(7);
+  //l2 & 11;
+  //l2 | 5;
+  //l2.appendItem(9);
+  //l2 | 13;
+  //l2 | 0;
+  //l2 | 4;
+  //cout << "mixing prepend and append and operators l2: " << endl << l2 << endl;
+  //assert(l2.tostring() == "[4, 0, 13, 5, 7, 8, 11, 9]");
+  //assert(l2.getSize() == 8);
+  //assert(l2.getAllocSize() == 17);
+  
+  cout << endl << endl;
+
+
+  //------------------------------------------------------------------------
+  // test concatenation
+  cout << "--------- Test concatenation operator ----------------------------" << endl;
+
+  //ListType l4 = l2 + l3;
+  //cout << "Test basic append, new l4: " << endl << l4 << endl;
+  //assert(l4.tostring() == "[4, 0, 13, 5, 7, 8, 11, 9, 4, 13, 8, 3, 9, 2, 7, 5, 12, 6, 11]");
+  //assert(l4.getSize() == 19);
+  //assert(l4.getAllocSize() == 19);
+  
+  //ListType l5 = l1 + l3 + l2;
+  //cout << "Test basic append, new l5: " << endl << l5 << endl;
+  //assert(l5.tostring() == "[1, 4, 3, 7, 0, 4, 13, 8, 3, 9, 2, 7, 5, 12, 6, 11, 4, 0, 13, 5, 7, 8, 11, 9]");
+  //assert(l5.getSize() == 24);
+  //assert(l5.getAllocSize() == 24);
+
+  //ListType emptyList;
+  //ListType l6 = l2 + emptyList;
+  //cout << "Test concatentate emptyList, new l6: " << endl << l6 << endl;
+  //assert(l6.tostring() == l2.tostring());
+  //assert(l6.getSize() == 8);
+  //assert(l6.getAllocSize() == 8);
+
+  //ListType l7 = emptyList + l1;
+  //cout << "Test concatentate emptyList, new l7: " << endl << l7 << endl;
+  //assert(l7.tostring() == l1.tostring());
+  //assert(l7.getSize() == 5);
+  //assert(l7.getAllocSize() == 5);
+
+  
+  cout << endl << endl;
+  
+  //------------------------------------------------------------------------
+  // test operator[] indexing and setter
+  cout << "--------- Test operator[] indexing ------------------------------" << endl;
+
+  //cout << "l1[0] == " << l1[0] << endl;
+  //assert(l1[0] == 1);
+  //cout << "l1[2] == " << l1[2] << endl;
+  //assert(l1[2] == 3);
+  //cout << "l1[4] == " << l1[4] << endl;
+  //assert(l1[4] == 0);
+
+  //cout << "Iterate over l2:" << endl << l2 << endl;
+  //for (int index = 0; index < l2.getSize(); index++)
+  //{
+  //  cout << "  l2[" << index << "] == " << l2[index] << endl;
+  //}
+  //cout << endl;
+  
+  //l2[0] = 8;
+  //cout << "ListType setter using operator[] l2[0] == " << l2[0] << endl;
+  //assert(l2[0] == 8);
+  
+  //l2[4] = -7;
+  //cout << "ListType setter using operator[] l2[4] == " << l2[4] << endl;
+  //assert(l2[4] == -7);
+
+  //l2[7] = 42;
+  //cout << "ListType setter using operator[] l2[7] == " << l2[7] << endl;
+  //assert(l2[7] == 42);
+
+  // test bounds checking on operator[]
+  // you should uncomment these to test, but you shouldn't leave them uncommented
+  // should cause exit and error message
+  //cout << l2[-5];
+
+  // should cause exit and error message
+  //cout << l2[8];
+  
+  cout << endl << endl;
+  
+
+  //------------------------------------------------------------------------
+  // test out of scope, destructors should be called
+  cout << "--------- main exiting scope, destructors should be invoked -----" << endl;
+
+  
+  // return 0 to indicate successful completion
+  return 0;
+}
