@@ -1,4 +1,10 @@
 /** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   February 28, 2019
+ * @assg   Assignment 07 Templates and Operator Overloading
  * 
  * @description Assignment 07 part 01, practice with operator overloading.
  *   In this first part of assignment, you need to define a ListType class
@@ -63,12 +69,12 @@ int main(int argc, char** argv)
   cout << "--------- Test output stream operator ---------------------------" << endl;
 
   cout << "l2 items: " << l2.tostring() << endl;
-  //assert(l2.tostring() == "[]");
-  //cout << l2 << endl << endl;
+  assert(l2.tostring() == "[]");
+  cout << l2 <<endl << endl;
 
   cout << "l3 items: " << l3.tostring() << endl;
-  //assert(l3.tostring() == "[3, 9, 2, 7, 5]");
-  //cout << l3 << endl << endl;
+  assert(l3.tostring() == "[3, 9, 2, 7, 5]");
+  cout << l3 << endl << endl;
 
   cout << endl << endl;
 
@@ -78,18 +84,18 @@ int main(int argc, char** argv)
   cout << "--------- Test append and operator& -----------------------------" << endl;
 
   // append to empty list
-  //l1.appendItem(1);
-  //cout << "append to empty l1: " << endl << l1 << endl;
-  //assert(l1.tostring() == "[1]" );
-  //assert(l1.getSize() == 1);
-  //assert(l1.getAllocSize() == 10);
+  l1.appendItem(1);
+  cout << "append to empty l1: " << endl << l1 << endl;
+  assert(l1.tostring() == "[1]" );
+  assert(l1.getSize() == 1);
+  assert(l1.getAllocSize() == 10);
 
   // append to non empty list
-  //l3.appendItem(12);
-  //cout << "append to nonempty l3: " << endl << l3 << endl;
-  //assert(l3.tostring() == "[3, 9, 2, 7, 5, 12]" );
-  //assert(l3.getSize() == 6);
-  //assert(l3.getAllocSize() == 15);
+  l3.appendItem(12);
+  cout << "append to nonempty l3: " << endl << l3 << endl;
+  assert(l3.tostring() == "[3, 9, 2, 7, 5, 12]" );
+  assert(l3.getSize() == 6);
+  assert(l3.getAllocSize() == 15);
   
   // append 2 items using operator& and test
   //l3 & 6;
