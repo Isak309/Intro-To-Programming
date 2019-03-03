@@ -1,3 +1,17 @@
+/** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   February 28, 2019
+ * @assg   Assignment 07 Templates and Operator Overloading
+ * 
+ * @description Assignment 07 part 01, practice with operator overloading.
+ *   In this first part of assignment, you need to define a ListType class
+ *   and overload the indicated operators.  This version of your class
+ *   will only support list of int values.  You will turn this into a
+ *   class template in part 2 of the assignment.
+ */
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -41,11 +55,18 @@ public:
   int getSize();
   int getAllocSize();
 
+
   // member functions
+  string tostring() const;
+  void appendItem(int value);
   
-  string tostring();
   // overloaded operators
+  friend ostream& operator<<(ostream& out, const ListType& aString);
+  
+  
+  //ListType operator<<(tostring);
   const ListType& operator=(const ListType& rightList);  // I also gave you the copy operator
+  
 };
 
 // need to include the template implementations here, if/when you templatize
