@@ -1,5 +1,17 @@
-//ListType.cpp
-
+/**
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   February 28, 2019
+ * @assg   Assignment 07 Templates and Operator Overloading
+ *
+ * @description Assignment 07 part 01, practice with operator overloading.
+ *   In this first part of assignment, you need to define a ListType class
+ *   and overload the indicated operators.  This version of your class
+ *   will only support list of int values.  You will turn this into a
+ *   class template in part 2 of the assignment.
+ */
 #include "ListType.hpp"
 
 
@@ -133,18 +145,18 @@ int ListType::getAllocSize()
   return allocSize;
 }
 
+
 /*
 * This function takes no parameters
 * as input, and it returns a string
 * will return a string of items currently
 * in list.
 */
-
-string ListType::tostring()
+string ListType::tostring() const
 {
   ostringstream out;
 
-  out << " [";
+  out << "[";
 
   // output first value, so we can remove , at end
   if (size >= 1)
@@ -162,4 +174,42 @@ string ListType::tostring()
   out << "]";
 
   return out.str();
+}
+
+
+/*
+* This operator will provide the ability for the ListType
+* class to be output to a stream.
+* @ param out - output stream
+* @ param aString - representation of output stream
+*/
+ostream& operator<<(ostream& out, const ListType& aString)
+{
+  out << aString.tostring();
+  return out;
+}
+
+
+/*
+* Void function that appends a value and puts it at the end of
+* the list varying if its over 9 or not
+* @ param int value - takes user input value to add to the array
+*/
+void ListType::appendItem(int value)
+{
+    int* newArray = new int[size + 1];
+    
+    for(int i = 0;i < size; i++)
+    {
+      newArray[i] = item[i];
+    }
+    
+  newArray[size] = value;
+  delete item;
+  item = newArray;
+  size = size + 1;
+  
+  allocSize = allocSize + ALLOCATION_INCREMENT;
+
+
 }
