@@ -1,0 +1,478 @@
+/** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   March 21, 2019
+ * @assg   Assignment 09 Linked Lists
+ * 
+ * @description Assignment 09 Build on our textbook example
+ *   implementation of a LinkedList type.  
+ */
+
+
+//-------------------------------------------------------------------------
+/** LinkedListIterator default constructor
+ * Default constructor, iterator will not be iterating over anything
+ * if constructed using the default constructor
+ */
+template <class T>
+LinkedListIterator<T>::LinkedListIterator()
+{
+  current = NULL;
+}
+
+
+/** LinkedListIterator constructor
+ * This constructor with parameter to begin iterating
+ * at particular node/point in a list.
+ *
+ * @param ptr A pointer to a Node<T> node where we should start
+ *   iterating from.
+ */
+template <class T>
+LinkedListIterator<T>::LinkedListIterator(Node<T>* ptr)
+{
+  current = ptr;
+}
+
+
+/** LinkedListIterator overload dereference
+ * Overload the dereference operator* for the LinkedListIterator.
+ * This method makes it easy/convenient to access the info that
+ * the iterator is currently pointing to.
+ *
+ * @returns T Returns the info currently being pointed to by this
+ *   iterator.
+ */
+template <class T>
+T LinkedListIterator<T>::operator*()
+{
+  // this is dangerous, we probably should check that current
+  // is not currently NULL
+  return current->info;
+}
+
+
+/** LinkedListIterator overload increment
+ * Overload the post increment operator++.  This is defined to cause the
+ * iterator to move to the next item in the list we are iterating over.
+ *
+ * @returns LinkedListIterator<T> We need to return a pointer to ourself, but
+ *   after we have incremented ourself to the next node of the list we are
+ *   iterating over.
+ */
+template <class T>
+LinkedListIterator<T> LinkedListIterator<T>::operator++()
+{
+  current = current->link;
+
+  return *this;
+}
+
+
+/** LinkedListIterator overload boolean equivalence
+ * Overload the boolean operator== to check for equivalence.  This is needed
+ * to create loops and test if we are done yet or not iterating over
+ * the list (by testing if the iterator is == the end() iterator item.
+ *
+ * @param right The other LinkedListIterator we are comparing ourself against.
+ *
+ * @returns bool True if the iterators are both pointing to the same node,
+ *   false otherwise.
+ */
+template <class T>
+bool LinkedListIterator<T>::operator==(const LinkedListIterator<T>& right) const
+{
+  return (current == right.current);
+}
+
+
+/** LinkedListIterator overload boolean not equal
+ * Overload the boolean operator!= to check for unequivalence.  This is needed
+ * to create loops and test if we are done yet or not iterating over
+ * the list (by testing if the iterator is != the end() iterator item.
+ *
+ * @param right The other LinkedListIterator we are comparing ourself against.
+ *
+ * @returns bool True if the iterators are not pointing to the same node,
+ *   false otherwise.
+ */
+template <class T>
+bool LinkedListIterator<T>::operator!=(const LinkedListIterator<T>& right) const
+{
+  return (current != right.current);
+}
+
+
+
+//-------------------------------------------------------------------------
+/** LinkedList default constructor
+ * Default constructor for the LinkedList ADT.  Starts by creating
+ * an empty list.
+ * postcondition: first = NULL, last = NUll, count = 0;
+ */
+template <class T>
+LinkedList<T>::LinkedList()
+{
+  first = NULL;
+  last = NULL;
+  count = 0;
+}
+
+
+/** LinkedList copy constructor
+ * Copy constructor for the LinkedList ADT.  Will allow a new
+ * list to be created from an existing list.
+ * postcondition: 
+ */
+template <class T>
+LinkedList<T>::LinkedList(const LinkedList<T>& otherList)
+{
+  // first needs to be NULL to make sure that copyList doesn't
+  // try and first destroyList() a nonsensical value
+  first = NULL;
+  copyList(otherList);
+}
+
+
+/** LinkedList destructor
+ * Destroy the list, deleting and freeing up any allocated Node<T> items
+ * in the process.
+ * postcondition: The list object is destroyed and all Node items in
+ *   list are freed.
+ */
+template <class T>
+LinkedList<T>::~LinkedList()
+{
+  destroyList();
+}
+
+
+/** LinkedList isEmpty
+ * Informational function to determine if list is currently
+ * empty or not.
+ * postcondition: returns true if the list is currently
+ *   empty, and false otherwise.
+ *
+ * @returns bool True if lest is emtpy, false otherwise
+ */
+template <class T>
+bool LinkedList<T>::isEmpty() const
+{
+  // when first == NULL the list is currently empty
+  return first == NULL;
+}
+
+
+/** LinkedList length
+ * Accessor method, simply returns the current LinkedList
+ * length.
+ * postcondition: The value of count is returned
+ *
+ * @returns int The current length or count of nodes is returned.
+ */
+template <class T>
+int LinkedList<T>::length() const
+{
+  return count;
+}
+
+/** LinkedList front
+ * Accessor method, return item at the front of the LinkedList.
+ * Note this function returns a copy, not a reference to the item, so
+ * modifying the item will not change the item in the list.  This
+ * does rely that the list type <T> has a copy operator.
+ * precondition: The list must exist and must not be empty.
+ * postcondition: If the list is empty, the program terminates,
+ *   otherwise, the first element of the list is returned.
+ *
+ * @returns <T> Returns a (copy) of the item at the front of the list.
+ */
+template <class T>
+T LinkedList<T>::front() const
+{
+  // Book uses assertion which causes program to abort here if
+  // list is empty.  A better solution would be to throw
+  // an exception.
+  assert(!isEmpty());
+  return first->info;
+}
+
+
+/** LinkedList back
+ * Accessor method, return item at the back of the LinkedList.
+ * Note this function returns a copy, not a reference to the item, so
+ * modifying the item will not change the item in the list.  This
+ * does rely that the list type <T> has a copy operator.
+ * precondition: The list must exist and must not be empty.
+ * postcondition: If the list is empty, the program terminates,
+ *   otherwise, the last element of the list is returned.
+ *
+ * @returns <T> Returns a (copy) of the item at the front of the list.
+ */
+template <class T>
+T LinkedList<T>::back() const
+{
+  return last->info;
+}
+
+
+/** LinkedList copy list
+ * Make an identical copy of the passed in list.
+ * postcondition: A copy of otherList is created and assigned
+ *   to this list.
+ *
+ * @param otherList A different LinkedList<T>, we will iterate over
+ *   and make a new copy of otherList and point this list to the
+ *   new copy.
+ */
+template <class T>
+void LinkedList<T>::copyList(const LinkedList<T>& otherList)
+{
+  Node<T>* newNode; // pointer to newly created nodes
+  Node<T>* current; // pointer to keep track of traversal of otherList
+
+  // if this list is nonempyt, make it empty first
+  if (first != NULL)
+  {
+    destroyList();
+  }
+
+  // if otherList is empty, just make this list empty
+  if (otherList.first == NULL)
+  {
+    first = NULL;
+    last = NULL;
+    count = 0;
+  }
+  else // otherwise do the copying
+  {
+    current = otherList.first;
+    count = otherList.count;
+
+    // copy the first node
+    first = new Node<T>;
+    first->info = current->info;
+    first->link = NULL;
+    last = first;
+
+    // move to next node to copy, and start copying
+    current = current->link;
+    while (current != NULL)
+    {
+      // allocate a new node and copy the info from otherList
+      newNode = new Node<T>;
+      newNode->info = current->info;
+      newNode->link = NULL;
+
+      // append the newNode to end of this new list
+      last->link = newNode;
+      last = newNode;
+
+      // increment otherList to the next Node we need to copy
+      // (or NULL if we have reached the end)
+      current = current->link;
+    }
+  }
+  
+}
+
+
+/** LinkedList destroy list
+ * Destroy the list, deleting and freeing up any allocated Node<T> items
+ * in the process.
+ * postcondition: The list object is empty and all Node items in
+ *   list are freed.  first = NULL, last = NULL, count = 0;
+ */
+template <class T>
+void LinkedList<T>::destroyList()
+{
+  Node<T>* current;
+
+  // iterate through list items from beginning
+  // till end
+  while (first != NULL)
+  {
+    // save the current node, and advance
+    // first to point to the next node in list
+    current = first;
+    first = first->link;
+
+    // now we can safely free up current node.
+    delete current;
+  }
+
+  last = NULL;
+  count = 0;
+}
+
+
+/** LinkedList insert first
+ * Function to insert newItem at the beginning of the list.
+ * postcondition: first points to a new Node with newItem as value, newItem
+ *   is inserted at the beginning of the list, last points to the last node
+ *   in the list, and count is incremented by 1
+ *
+ * @param newItem The new item of type T to be inserted at the beginning of
+ *   this list.
+ */
+template <class T>
+void LinkedList<T>::insertFirst(const T& newItem)
+{
+  Node<T>* newNode;
+
+  // create the new node and store the new item in it
+  newNode = new Node<T>;
+  newNode->info = newItem;
+
+  // insert the newNode before first
+  newNode->link = first;
+  first = newNode;
+
+  // increment count to reflect we have 1 more item now
+  count++;
+
+  // if the list was empty, we have to update last to
+  // be pointing to the newNode as well
+  if (last == NULL)
+  {
+    last = newNode;
+  }
+}
+
+
+/** LinkedList insert last
+ * Function to insert newItem at the end of the list.
+ * postcondition: last points to a new Node with newItem as value, newItem
+ *   is inserted at the end of the list, first points to the first node
+ *   in the list and last points to the last node
+ *   in the list, and count is incremented by 1
+ *
+ * @param newItem The new item of type T to be inserted at the end of
+ *   this list.
+ */
+template <class T>
+void LinkedList<T>::insertLast(const T& newItem)
+{
+  Node<T>* newNode;
+
+  // create the new node and store the new item in it
+  newNode = new Node<T>;
+  newNode->info = newItem;
+  newNode->link = NULL;
+
+  // if list is currently empty, newNode is both the first
+  // and the last node
+  if (first == NULL)
+  {
+    first = newNode;
+    last = newNode;
+  }
+  else  // otherwise list is not empty, so insert on end
+  {
+    last->link = newNode;
+    last = newNode;
+  }
+
+  // we added a new item, make sure to update count
+  count++;
+}
+
+
+/** LinkedList begin iterator
+ * Return a LinkedListIterator pointing to the beginning of this list of
+ * items, ready to be iterated over.
+ *
+ * @returns LinkedListIterator<T> returns a new class of type Iterator that
+ *   keeps track of iterating over the list items.
+ */
+template <class T>
+LinkedListIterator<T> LinkedList<T>::begin()
+{
+  LinkedListIterator<T> beginItr(first);
+
+  return beginItr;
+}
+
+
+/** LinkedList end iterator
+ * Return a LinkedListIterator pointing to a NULL node, which is used to indicate
+ * we are at the end of the list.
+ *
+ * @returns LinkedListIterator<T> returns a new class of type Iterator that
+ *   points to NULL, indicating we are at the end of a list iteration.
+ */
+template <class T>
+LinkedListIterator<T> LinkedList<T>::end()
+{
+  LinkedListIterator<T> endItr(NULL);
+
+  return endItr;
+}
+
+
+
+/** LinkedList tostring
+ * Function to represent the current contents and order of this LinkedList
+ * as a string.  This function is used by the overloaded output stream
+ * operator<< to convert and display lists on ostreams.
+ * postcondition: function is const, list will not be changed by calling
+ *
+ * @returns string returns a string representation of the contents of this
+ *   LinkedList.
+ */
+template <class T>
+string LinkedList<T>::tostring() const
+{
+  ostringstream out;
+  Node<T>* current;
+
+  out << "List count: " << count << endl;
+  out << "      info: [";
+
+  // if list is not empty display the items
+  if (first != NULL)
+  {
+    // output the first item
+    out << first->info;
+    current = first->link;
+
+    // iterate over remaining items and output them
+    while (current != NULL)
+    {
+      out << ", " << current->info;
+
+      // advance to next item in list
+      current = current->link;
+    }
+  }
+
+  // close the displayed list
+  out << "]" << endl;
+
+  // return the string in our output string stream
+  return out.str();
+}
+
+
+/** LinkedList overload output stream operator
+ * A friend function of the LinkedList class that overloads the
+ * output stream operator<< so that we can conveniently create
+ * a string representation of a LinkedList and send it to an
+ * output stream.
+ *
+ * @param out A reference to an output stream object we are to insert
+ *   our LinkedList representation into.
+ * @param list The LinkedList<T> type object whose items we are to send
+ *   to the output stream.
+ *
+ * @returns ostream Returns the original referenced output stream, but after
+ *   we insert items into it.
+ */
+template <class T>
+ostream& operator<<(ostream& out, const LinkedList<T>& list)
+{
+  out << list.tostring();
+  return out;
+}
