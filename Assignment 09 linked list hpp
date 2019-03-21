@@ -1,0 +1,141 @@
+/** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   March 21, 2019
+ * @assg   Assignment 09 Linked Lists
+ * 
+ * @description Assignment 09 Build on our textbook example
+ *   implementation of a LinkedList type.  
+ */
+//#ifndef _LINKEDLIST_H_
+//#define _LINKEDLIST_H_
+#include <string>
+#include <sstream>
+#include <cassert>
+using namespace std;
+
+
+/** Node
+ * A simple Node structure type to be used as items
+ * in our linked list ADT implementations.
+ *
+ * @value info The actual data of type T this node contains.
+ * @value link A pointer to the next node of the linked list.
+ */
+template <class T>
+struct Node
+{
+  T info;
+  Node<T>* link;
+};
+
+
+/** LinkedList iterator
+ * A class that provides common iteration over a LinkedList
+ * data type.
+ *
+ * @value current pointer to the point current node in linked list
+ *   we are iterating through
+ */
+template <class T>
+class LinkedListIterator
+{
+private:
+  Node<T>* current;
+
+public:
+  // constructors
+  LinkedListIterator();
+  LinkedListIterator(Node<T>* ptr);
+
+  // overloaded operators
+  T operator*();
+  LinkedListIterator<T> operator++();
+  bool operator==(const LinkedListIterator<T>& right) const;
+  bool operator!=(const LinkedListIterator<T>& right) const;
+};
+
+
+/** LinkedList ADT
+ * This 
+ *
+ * @value count An int that keeps the current count of the number
+ *   of items in this list.
+ * @value first pointer to the first node of the linked list.
+ * @value last  pointer to the last node of the linked list.
+ */
+template <class T>
+class LinkedList
+{
+private:
+  int count;
+  Node<T>* first;
+  Node<T>* last;
+  
+public:
+  // constructors and destructors
+  LinkedList();
+  LinkedList(const LinkedList<T>& otherList);
+  ~LinkedList();
+
+  // simple accessor and information methods
+  bool isEmpty() const;
+  int length() const;
+  T front() const;
+  T back() const;
+  
+  // general member functions
+  void copyList(const LinkedList<T>& otherList);
+  void destroyList();
+
+  // functions for insertion, deletion, searching
+  void insertFirst(const T& newItem);
+  void insertLast(const T& newItem);
+
+  // functions for iterating over the list items
+  LinkedListIterator<T> begin();
+  LinkedListIterator<T> end();
+  
+  // overloaded operators
+  string tostring() const;
+
+  template <typename U>
+  friend ostream& operator<<(ostream& out, const LinkedList<U>& list);
+};
+
+
+/** Exception item not found
+ * Exception for our LinkedList class to throw when searching for
+ * an item and it is not found.
+ */
+class LinkedListItemNotFoundException
+{
+private:
+  string message;
+
+public:
+  LinkedListItemNotFoundException()
+  {
+    message = "Error: LinkedList item not found";
+  }
+
+  LinkedListItemNotFoundException(string str)
+  {
+    message = "Error: LinkedList item not found" + str;
+  }
+
+  string what()
+  {
+    return message;
+  }
+};
+  
+
+
+// include the template implementations, need to be in header
+#include "LinkedList.cpp"
+
+
+//#endif // _LINKEDLIST_H_
