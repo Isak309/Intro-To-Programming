@@ -1,0 +1,378 @@
+/** 
+ * @author Isak Angerstig
+ * @cwid   502 09 016
+ * @class  COSC 2336, Spring 2019
+ * @ide    Visual Studio Community 2017
+ * @date   March 21, 2019
+ * @assg   Assignment 09 Linked Lists
+ * 
+ * @description Assignment 09 Build on our textbook example
+ *   implementation of a LinkedList type.  
+ */
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include "LinkedList.hpp"
+using namespace std;
+
+
+/** main 
+ * The main entry point for this program.  Execution of this program
+ * will begin with this main function.
+ *
+ * @param argc The command line argument count which is the number of
+ *     command line arguments provided by user when they started
+ *     the program.
+ * @param argv The command line arguments, an array of character
+ *     arrays.
+ *
+ * @returns An int value indicating program exit status.  Usually 0
+ *     is returned to indicate normal exit and a non-zero value
+ *     is returned to indicate an error condition.
+ */
+int main(int argc, char** argv)
+{
+  LinkedList<string> myList;
+  
+  // ----------------------------------------------------------------------
+  cout << "-------------- Tests of functions given for assignment --------------"
+       << endl << endl;
+
+  // test basic list functionality
+  cout << "test list isEmpty? " << boolalpha << myList.isEmpty() << endl;
+  assert(myList.isEmpty());
+  
+  cout << "list length should be 0: " << myList.length() << endl;
+  assert(myList.length() == 0);
+
+  myList.insertFirst("First Item");
+  myList.insertFirst("Second Item");
+  cout << "list front item: " << myList.front() << endl;
+  assert(myList.front() == "Second Item");
+  cout << "list back item: " << myList.back() << endl;
+  assert(myList.back() == "First Item");
+
+  myList.insertLast("Back Item");
+  myList.insertLast("Back Item Again");
+  cout << "list back item is now: " << myList.back() << endl;
+  assert(myList.back() == "Back Item Again");
+  assert(myList.front() == "Second Item");
+  cout << "list length is now: " << myList.length() << endl;
+  assert(myList.length() == 4);
+  cout << "list is no longer empty? " << boolalpha << myList.isEmpty() << endl;
+  assert(!myList.isEmpty());
+
+  // test stream output and tostring
+  ostringstream teststr;
+  cout << "<myList>: " << endl
+       << myList << endl;
+  teststr << "List count: 4" << endl;
+  teststr << "      info: [Second Item, First Item, Back Item, Back Item Again]" << endl;
+  assert(myList.tostring() == teststr.str());
+
+  // test list iteration
+  // notice we have to use prefix ++ increment, you overload postfix operator ++
+  // differently
+  int index = 0;
+  for (LinkedListIterator<string> itr = myList.begin(); itr != myList.end(); ++itr)
+  {
+    cout << "Iterating list item at index[" << index << "] = " << *itr << endl;
+    index++;
+  }
+  cout << endl;
+
+  // if you haven't discovered range based iterators yet, they allow us to
+  // write loops avoiding a lot of the cruft of these iterator classes for
+  // template container classes
+  index = 0;
+  for (string info : myList)
+  {
+    cout << "Using range based got info it index[" << index << "] = "
+	 << info << endl;
+    index++;
+  }
+  cout << endl;
+
+  // test  copy and destroy functions
+  LinkedList<string> anotherList(myList);
+  cout << anotherList << endl;
+  cout << "anotherList length: " << anotherList.length() << endl;
+  assert(anotherList.length() == 4);
+  
+  cout << "Test all items are equal after copy constructor:" << endl;
+  index = 0;
+  LinkedListIterator<string> itr = myList.begin();
+  for (string info : anotherList)
+  {
+    cout << "Item index: " << index << endl;
+    cout << "Item from another list : " << info << endl;
+    cout << "Item from original list: " << *itr << endl;
+
+    // test all items are equal
+    assert(info == *itr);
+
+    // increment our iterator and our index variable for next item in list
+    ++itr;
+    index++;
+  }
+  cout << endl;
+
+  anotherList.destroyList();
+  cout << "After emptying anotherList: " << anotherList << endl;
+  cout << "myList should still be fine: " << myList << endl;
+
+  // try testing copyList directly
+  anotherList.copyList(myList);
+  cout << "After copying back again anotherList: " << anotherList << endl;
+  assert(anotherList.length() == 4);
+  assert(!anotherList.isEmpty());
+
+  cout << "Test all items are equal after copyList() function:" << endl;
+  index = 0;
+  itr = anotherList.begin();
+  for (string info : myList)
+  {
+    cout << "Item index: " << index << endl;
+    cout << "Item from my list    : " << info << endl;
+    cout << "Item from copied list: " << *itr << endl;
+
+    // test all items are equal
+    assert(info == *itr);
+
+    // increment our iterator and our index variable for next item in list
+    ++itr;
+    index++;
+  }
+  cout << endl << endl;
+
+  anotherList.destroyList(); // have an empty list for tests
+
+  
+  // ----------------------------------------------------------------------
+  cout << "-------------- Test search() function -------------------------------"
+       << endl << endl;
+  
+  // cout << "search() test if front item found: "
+  //      << boolalpha << myList.search("Second Item") << endl;
+  // assert(myList.search("Second Item") == true);
+  
+  // cout << "search() test if back item found: "
+  //      << boolalpha << myList.search("Back Item Again") << endl;
+  // assert(myList.search("Back Item Again") == true);
+  
+  // cout << "search() test if middle item found: "
+  //      << boolalpha << myList.search("Back Item") << endl;
+  // assert(myList.search("Back Item") == true);
+  
+  // cout << "search() test unsuccessful search: "
+  //      << boolalpha << myList.search("Bogus Item") << endl;
+  // assert(myList.search("Bogus Item") == false);
+
+  // cout << "search() test on empty list: "
+  //      << boolalpha << anotherList.search("Second Item") << endl;
+  // assert(anotherList.search("Second Item") == false);
+
+  cout << endl << endl;
+
+
+  // ----------------------------------------------------------------------
+  cout << "-------------- Test deleteNode() function ---------------------------"
+       << endl << endl;
+  
+  // myList.deleteNode("First Item");
+  // cout << "deleteNode() delete middle node:" << endl
+  //      << myList << endl;
+  // assert(myList.length() == 3);
+  
+  // myList.deleteNode("Second Item");
+  // cout << "deleteNode() delete first node:" << endl
+  //      << myList << endl;
+  // assert(myList.length() == 2);
+  
+  // myList.deleteNode("Back Item Again");
+  // cout << "deleteNode() delete last node:" << endl
+  //      << myList << endl;
+  // assert(myList.length() == 1);
+
+  // try
+  // {
+  //   myList.deleteNode("Bogus Item");
+  //   assert(false); // we expect an exception, not this assertion to run
+  // }
+  // catch (LinkedListItemNotFoundException itemNotFoundObj)
+  // {
+  //   cout << "deleteNode() try and delete nonexistent item" << endl
+  // 	 << myList << endl;
+  //   cout << "   caught item not found exception: " << endl
+  //        << "   " << itemNotFoundObj.what() << endl << endl;
+  //   assert(myList.length() == 1);
+  // }
+  
+  // myList.deleteNode("Back Item");
+  // cout << "deleteNode() delete only node, list is now empty:" << endl
+  //      << myList << endl;
+  // assert(myList.length() == 0);
+  // assert(myList.isEmpty());
+
+
+  // ----------------------------------------------------------------------
+  cout << "-------------- Test findItemAtIndex() function ----------------------"
+       << endl << endl;
+
+  // lets make a new list of a different type for these tests
+  LinkedList<int> iList;
+  iList.insertLast(5);
+  iList.insertLast(7);
+  iList.insertLast(2);
+  iList.insertLast(8);
+  iList.insertFirst(1);
+  cout << "findItemAtIndex(): created new list of integers of length: "
+       << iList.length() << endl;
+  cout << iList << endl << endl;
+  assert(iList.length() == 5);
+  assert(iList.front() == 1);
+  assert(iList.back() == 8);
+
+  // find some items
+  // cout << "findItemAtIndex() item at index 2: "
+  //      << iList.findItemAtIndex(2) << endl;
+  // assert(iList.findItemAtIndex(2) == 7);
+  
+  // cout << "findItemAtIndex() item at last valid index: "
+  //      << iList.findItemAtIndex(4) << endl;
+  // assert(iList.findItemAtIndex(4) == 8);
+  
+  // cout << "findItemAtIndex() item at index 0: "
+  //      << iList.findItemAtIndex(0) << endl;
+  // assert(iList.findItemAtIndex(0) == 1);
+
+  // try
+  // {
+  //   iList.findItemAtIndex(5);
+  //   assert(false); // we expect an exception, not this assertion to run
+  // }
+  // catch (LinkedListItemNotFoundException itemNotFoundObj)
+  // {
+  //   cout << "findItemAtIndex() tried invalid index 5" << endl;
+  //   cout << "   caught item not found exception: " << endl
+  //        << "   " << itemNotFoundObj.what() << endl << endl;
+  // }
+    
+  // try
+  // {
+  //   iList.findItemAtIndex(-1);
+  //   assert(false); // we expect an exception, not this assertion to run
+  // }
+  // catch (LinkedListItemNotFoundException itemNotFoundObj)
+  // {
+  //   cout << "findItemAtIndex() tried invalid index -1" << endl;
+  //   cout << "   caught item not found exception: " << endl
+  //        << "   " << itemNotFoundObj.what() << endl << endl;
+  // }
+
+  // test returning a reference
+  // int& item = iList.findItemAtIndex(1);
+  // cout << "findItemAtIndex() returned item at index 1: " << item << endl;
+  // assert(item == 5);
+  // item = 9;
+  // cout << "findItemAtIndex() after changing item to 9: "
+  //      << iList << endl;
+  // assert(iList.findItemAtIndex(1) == 9);
+
+  // iList.findItemAtIndex(4) = 10;
+  // cout << "findItemAtIndex() after changing lst item to `0: "
+  //      << iList << endl;
+  // assert(iList.findItemAtIndex(4) == 10);
+
+  // Extra Credit: operator[]
+  // cout << "operator[] test overloading, get item 2: "
+  //      << iList[2] << endl;
+  // assert(iList[2] == 7);
+
+  // cout << "operator[] test overloading, get item 0: "
+  //      << iList[0] << endl;
+  // assert(iList[0] == 1);
+
+
+  // ----------------------------------------------------------------------
+  cout << "-------------- Test deleteItemAtIndex() function --------------------"
+       << endl << endl;
+
+  // iList.deleteItemAtIndex(2);
+  // cout << "deleteItemAtIndex() delete middle node:" << endl
+  //      << iList << endl;
+  // assert(iList.length() == 4);
+
+  // iList.deleteItemAtIndex(0);
+  // cout << "deleteItemAtIndex() delete first node index 0:" << endl
+  //      << iList << endl;
+  // assert(iList.length() == 3);
+  // assert(iList.front() == 9);
+
+  // iList.deleteItemAtIndex(2);
+  // cout << "deleteItemAtIndex() delete last node index 2:" << endl
+  //      << iList << endl;
+  // assert(iList.length() == 2);
+  // assert(iList.back() == 2);
+
+  // try
+  // {
+  //   iList.deleteItemAtIndex(2);
+  //   assert(false); // we expect an exception, not this assertion to run
+  // }
+  // catch (LinkedListItemNotFoundException itemNotFoundObj)
+  // {
+  //   cout << "deleteItemAtIndex() try and dleete invalid index" << endl
+  // 	 << iList << endl;
+  //   cout << "   caught item not found exception: " << endl
+  // 	 << "   " << itemNotFoundObj.what() << endl << endl;
+  //   assert(iList.length() == 2);
+  // }
+  
+  // try
+  // {
+  //   iList.deleteItemAtIndex(-2);
+  //   assert(false); // we expect an exception, not this assertion to run
+  // }
+  // catch (LinkedListItemNotFoundException itemNotFoundObj)
+  // {
+  //   cout << "deleteItemAtIndex() try and dleete invalid negative index" << endl
+  // 	 << iList << endl;
+  //   cout << "   caught item not found exception: " << endl
+  // 	 << "   " << itemNotFoundObj.what() << endl << endl;
+  //   assert(iList.length() == 2);
+  // }
+  
+  // clear out remaining list using this function
+  // iList.deleteItemAtIndex(0);
+  // iList.deleteItemAtIndex(0);
+  // cout << "deleteItemAtIndex() deleted last 2 items, expect empty list:" << endl
+  //      << iList << endl;
+  // assert(iList.length() == 0);
+  // assert(iList.isEmpty());
+
+
+  // ----------------------------------------------------------------------
+  cout << "-------------- Test toReverseString() function (Extra Credit) -------"
+       << endl << endl;
+
+  // test empty list
+  // cout << "toReverseString() test empty list:" << endl
+  //      << iList.toReverseString() << endl;
+
+  // put some items back on the list...
+  // iList.insertLast(1);
+  // iList.insertLast(2);
+  // iList.insertLast(3);
+  // iList.insertLast(4);
+  // cout << "the string in normal order: " << endl
+  //      << iList << endl;
+
+  // cout << "toReverseString() test: " << endl
+  //      << iList.toReverseString() << endl;
+
+
+    
+  // return 0 to indicate successful completion
+  return 0;
+}
